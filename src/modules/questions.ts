@@ -29,7 +29,7 @@ export class Question implements IQuestion {
 }
 
 export async function fetchQuestions(): Promise<Question[]> {
-  const response = await fetch('./../../questions.json');
+  const response = await fetch('questions.json');
   const data = await response.json();
 
   let questions: Question[] = data.map(
