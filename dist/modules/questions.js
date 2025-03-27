@@ -11,5 +11,9 @@ export async function fetchQuestions() {
     const response = await fetch('./../../questions.json');
     const data = await response.json();
     let questions = data.map((questions) => new Question(questions.category, questions.question, questions.options, questions.answer, questions.difficulty));
-    return questions;
+    let shuffeled = shuffleArray(questions);
+    return shuffeled.slice(0, 5);
+}
+function shuffleArray(array) {
+    return array.sort(() => Math.random() - 0.5);
 }

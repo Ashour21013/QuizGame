@@ -42,6 +42,11 @@ export async function fetchQuestions(): Promise<Question[]> {
         questions.difficulty,
       ),
   );
+  let shuffeled: Question[] = shuffleArray(questions);
 
-  return questions;
+  return shuffeled.slice(0,5);
+}
+
+function shuffleArray(array: Question[]): Question[] {
+  return array.sort(() => Math.random() - 0.5);
 }
