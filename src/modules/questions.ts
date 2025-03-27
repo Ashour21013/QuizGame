@@ -42,9 +42,15 @@ export async function fetchQuestions(): Promise<Question[]> {
         questions.difficulty,
       ),
   );
-  let shuffeled: Question[] = shuffleArray(questions);
+  let easy: Question[] = questions.filter((q) => q.difficulty === 'easy');
+  let medium: Question[] = questions.filter((q) => q.difficulty === 'medium');
+  let hard: Question[] = questions.filter((q) => q.difficulty === 'hard');
 
-  return shuffeled.slice(0,5);
+  return [
+    ...shuffleArray(easy).slice(0, 2),
+    ...shuffleArray(medium).slice(0, 2),
+    ...shuffleArray(hard).slice(0, 1),
+  ];
 }
 
 function shuffleArray(array: Question[]): Question[] {
