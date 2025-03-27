@@ -8,19 +8,50 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container mt-5">
-    <div id="player-input" class="mb-4">
-      <!-- Place the player name input here -->
-    </div>
-    <div id="quiz-container" class="card" style="display: none;">
-      <div class="card-body">
-        <h1 class="card-title text-center">Quiz</h1>
-        <!-- Place the question, the options and the results here -->
+  <div id="app-wrapper">
+    <div class="player-container">
+      <div id="player-input" class="mb-4">
+        <!-- Place the player name input here -->
+        <input id="player-name" type="text" placeholder="Enter your name">
+        <br>
+        <button id="start-quiz" class="btn btn-primary">Start Quiz</button>
       </div>
-    </div>
-    <div id="leaderboard" class="mt-5">
-      <h2>Leaderboard</h2>
-      <!-- Place the leaderboard list here -->
+      <div id="quiz-container" class="card" style="display: none;">
+        <div class="card-body">
+          <h1 class="card-title text-center">Quiz</h1>
+          <!-- Place the question, the options and the results here -->
+          <p id="category-text"></p>
+          <p id="difficulty-text"></p>
+          <p id="question-text"></p>
+          <div id="options-container"></div> 
+        </div>
+      </div>
+      <div id="leaderboard" class="mt-5">
+        <h2>Leaderboard</h2>
+        <!-- Place the leaderboard list here -->
+        <table id="leaderboard-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Punkte</th>
+              <th>Prozent</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>John Doe</td>
+              <td>50</td>
+              <td>83%</td>
+            </tr>
+            <tr>
+              <td>Jane Smith</td>
+              <td>45</td>
+              <td>75%</td>
+            </tr>
+            <!-- Weitere Zeilen können hier dynamisch hinzugefügt werden -->
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
   <script type="module" src="dist/main.js"></script>
