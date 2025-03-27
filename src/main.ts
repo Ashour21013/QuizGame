@@ -1,3 +1,9 @@
-console.log('Hello World');
+import { fetchQuestions, Question } from './modules/questions.js';
 
-console.log('Created git repo');
+//beispiel aufruf um die daten zu holen
+async function init() {
+  let questions: Question[] = await fetchQuestions();
+  console.log(questions);
+}
+
+init();
