@@ -89,7 +89,6 @@ async function displayQuestions(index: number, questions: IQuestion[]): Promise<
     currentQuestion.options.forEach((option: string | number) => {
       const optionButton = document.createElement('button');
       optionButton.textContent = String(option);  // Optionstext (String oder Zahl)
-      optionButton.classList.add('quiz-option', 'btn', 'btn-outline-primary', 'm-2');
 
       // Klick-Event für die Option
       optionButton.addEventListener('click', () => {

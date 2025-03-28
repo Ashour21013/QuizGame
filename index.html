@@ -14,26 +14,28 @@
         <!-- Place the player name input here -->
         <input id="player-name" type="text" placeholder="Enter your name">
         <br>
-        <button id="start-quiz" class="btn btn-primary">Start Quiz</button>
+        <button id="start-quiz">Start Quiz</button>
       </div>
       <div id="quiz-container" class="card" style="display: none;">
         <div class="card-body">
-          <h1 class="card-title text-center">Quiz</h1>
-          <!-- Place the question, the options and the results here -->
-          <p id="category-text"></p>
-          <p id="difficulty-text"></p>
-          <p id="question-text"></p>
-          <div id="options-container"></div> 
+            <h1 class="card-title text-center">Quiz</h1>
+            <!-- Place the question, the options and the results here -->
+            <p id="category-text"></p>
+            <p id="difficulty-text"></p>
+            <p id="question-text"></p>
+            <div id="options-container"></div> 
         </div>
         <div id="statistics-container" >
-          <h3>Statistics</h3>
-          <h4 id="player-name-text"></h4>
-          <p id="score-text"></p>
-          <p id="percentage-text"></p>
-          <p id="question-number-text"></p>
+            <h3>Statistics</h3>
+            <h4 id="player-name-text"></h4>
+            <p id="score-text"></p>
+            <p id="percentage-text"></p>
+            <p id="question-number-text"></p>
         </div>
-        <button id="next-player-button" class="btn btn-primary" style="display: none">Next Player</button>
-      </div>
+        <div id="center-button"> <!-- Correct id usage here -->
+            <button id="next-player-button" style="display: none">Next Player</button>
+        </div>
+    </div>
       <div id="leaderboard" class="mt-5">
         <h2>Leaderboard</h2>
         <!-- Place the leaderboard list here -->

@@ -79,7 +79,6 @@ async function displayQuestions(index, questions) {
         currentQuestion.options.forEach((option) => {
             const optionButton = document.createElement('button');
             optionButton.textContent = String(option); // Optionstext (String oder Zahl)
-            optionButton.classList.add('quiz-option', 'btn', 'btn-outline-primary', 'm-2');
             // Klick-Event für die Option
             optionButton.addEventListener('click', () => {
                 // Punktestand berechnen
