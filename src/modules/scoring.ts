@@ -23,4 +23,9 @@ export class Scoring {
 
     return this.totalQuestions === 0 ? 0 : (this.score / 9) * 100;
   }
+  
+  resetScore(): void {
+    this.score = 0;
+    this.totalQuestions = 0;
+  }
 }
