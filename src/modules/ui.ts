@@ -10,110 +10,189 @@ const questionText = document.getElementById('question-text');
 const optionsDiv = document.getElementById('options-container');
 const categoryText = document.getElementById('category-text');
 const difficultyText = document.getElementById('difficulty-text');
+const statisticsDiv = document.getElementById('statistics-container');
+const scoreText = document.getElementById('score-text');
+const percentageText = document.getElementById('percentage-text');
+const questionNumberText = document.getElementById('question-number-text');
+const cardBody = document.querySelector('.card-body');
+const nextPlayerButton = document.getElementById('next-player-button');
+const playerNameStatistic = document.getElementById('player-name-text');
+
 let playerName: string = '';
+let questions: Question[] = [];
+let currentQuestionIndex = 0;
 
 export async function play() {
-    if (startQuizButton) {
-      startQuizButton.addEventListener('click', async () => {
-        let questions: Question[] = await fetchQuestions();
-        if (playerNameInput instanceof HTMLInputElement && playerNameInput.value.length > 0) {
-          playerName = playerNameInput.value;
-          
-          if (playerInputDiv) {
-            playerInputDiv.style.display = 'none';
-          }
-  
-          if (quizDiv) {
-            quizDiv.style.display = 'block';
-            if (questions.length > 0) {
-              await displayQuestion(0, questions);
+  if (startQuizButton) {
+    startQuizButton.addEventListener('click', async () => {
+      questions = await fetchQuestions();  // Holt die Fragen
+      currentQuestionIndex = 0;  // Setzt den Index zurück
+
+      if (playerNameInput instanceof HTMLInputElement && playerNameInput.value.length > 0) {
+        playerName = playerNameInput.value;
+
+        // Verstecke die Eingabe und zeige das Quiz an
+        if (playerInputDiv) playerInputDiv.style.display = 'none';
+        if (quizDiv) quizDiv.style.display = 'block';
+
+        // Zeige den Spielernamen an
+        if (playerNameStatistic) {
+          playerNameStatistic.textContent = `Player: ${playerName}`;
+        }
+
+        // Zeige die erste Frage an
+        if (questions.length > 0) {
+          await displayQuestions(currentQuestionIndex, questions);
+        }
+      } else {
+        alert('Please enter your name!');
+      }
+    });
+  }
+}
+
+async function displayQuestions(index: number, questions: IQuestion[]): Promise<void> {
+  if (quizDiv && questionText && optionsDiv && categoryText && difficultyText && questions.length > index) {
+    const currentQuestion = questions[index];
+
+    quizDiv.style.display = 'block'; // Quiz-Container anzeigen
+    if (cardBody instanceof HTMLElement) {
+        cardBody.style.display = 'block'; // Card-Body anzeigen
+        }
+    // Statistiken anzeigen
+    if (statisticsDiv) {
+        statisticsDiv.style.display = 'block';
+        if (index == 0) {
+            if (scoreText) {
+                scoreText.textContent = 'Points: 0'; // Punkte zurücksetzen
             }
+            if (percentageText) {
+                percentageText.textContent = 'Total Percentage: 0%'; // Prozent zurücksetzen
+            }
+            if (questionNumberText) {
+                questionNumberText.textContent = `Question 1 out of ${questions.length}`; // Frage 1 anzeigen
+            }
+        }
+    }
+
+    // Kategorie und Schwierigkeit anzeigen
+    categoryText.textContent = `Kategorie: ${currentQuestion.category}`;
+    difficultyText.textContent = `Schwierigkeit: ${currentQuestion.difficulty}`;
+
+    // Frage anzeigen
+    questionText.textContent = currentQuestion.question;
+
+    // Vorherige Optionen löschen
+    optionsDiv.innerHTML = '';
+
+    // Optionen erstellen und anzeigen
+    currentQuestion.options.forEach((option: string | number) => {
+      const optionButton = document.createElement('button');
+      optionButton.textContent = String(option);  // Optionstext (String oder Zahl)
+      optionButton.classList.add('quiz-option', 'btn', 'btn-outline-primary', 'm-2');
+
+      // Klick-Event für die Option
+      optionButton.addEventListener('click', () => {
+        // Punktestand berechnen
+        if (option === currentQuestion.answer) {
+          scoring.calculatePoints(currentQuestion.difficulty, true);
+        } else {
+          scoring.calculatePoints(currentQuestion.difficulty, false);
+        }
+
+        if (scoreText && percentageText) {
+          scoreText.textContent = `Points: ${scoring.getScore()}`;
+          percentageText.textContent = `Total Percentage: ${scoring.getScorePercentage().toFixed(2)}%`;
+        }
+
+        // Nächste Frage oder Ende des Quiz
+        if (index + 1 < questions.length) {
+          currentQuestionIndex = index + 1;
+          displayQuestions(currentQuestionIndex, questions);
+          if (questionNumberText) {
+            questionNumberText.textContent = `Question ${index + 2} out of ${questions.length}`;
           }
         } else {
-          alert('Please enter your name!');
+          endQuiz();
         }
       });
-    }
+
+      // Option zum Container hinzufügen
+      optionsDiv.appendChild(optionButton);
+    });
+
+    quizDiv.style.display = 'block';
+  }
+}
+
+function endQuiz(): void {
+  if (cardBody instanceof HTMLElement) {
+    cardBody.style.display = 'none'; // Quiz ausblenden
   }
 
-export async function displayQuestion(index: number, questions: IQuestion[]): Promise<void> {
-    if (quizDiv && questionText && optionsDiv && categoryText && difficultyText && questions.length > index) {
-        const currentQuestion = questions[index];
+  if (statisticsDiv) {
+    statisticsDiv.style.display = 'block'; // Statistiken anzeigen
+  }
 
-        // Kategorie und Schwierigkeit anzeigen
-        categoryText.textContent = `Kategorie: ${currentQuestion.category}`;
-        difficultyText.textContent = `Schwierigkeit: ${currentQuestion.difficulty}`;
+  if (nextPlayerButton) {
+    nextPlayerButton.style.display = 'block'; // Nächster Spieler-Button anzeigen
+    nextPlayerButton.addEventListener('click', resetQuizState); // Reset für den nächsten Spieler
+  }
+}
 
-        // Frage anzeigen
-        questionText.textContent = currentQuestion.question;
+function resetQuizState(): void {
+  // Verstecke alle relevanten Elemente
+  if (quizDiv) quizDiv.style.display = 'none';
+  if (statisticsDiv) statisticsDiv.style.display = 'none';
+  if (nextPlayerButton) nextPlayerButton.style.display = 'none';
+  if (playerInputDiv) playerInputDiv.style.display = 'block';
 
-        // Vorherige Optionen löschen
-        optionsDiv.innerHTML = '';
+  // Setze Texte und Inhalte zurück
+  if (questionText) questionText.textContent = '';
+  if (optionsDiv) optionsDiv.innerHTML = '';
+  if (categoryText) categoryText.textContent = '';
+  if (difficultyText) difficultyText.textContent = '';
+  if (scoreText) scoreText.textContent = 'Points: 0';
+  if (percentageText) percentageText.textContent = 'Total Percentage: 0%';
+  if (questionNumberText) questionNumberText.textContent = '';
 
-        // Optionen erstellen und anzeigen
-        currentQuestion.options.forEach((option: string | number, optionIndex: number) => {
-            const optionButton = document.createElement('button');
-            optionButton.textContent = String(option); // Optionstext (String oder Zahl)
-            optionButton.classList.add('quiz-option', 'btn', 'btn-outline-primary', 'm-2');
+  // Spielername zurücksetzen
+  if (playerNameInput instanceof HTMLInputElement) {
+    playerNameInput.value = '';
+  }
 
-            // Klick-Event für die Option
-            optionButton.addEventListener('click', () => {
-                if (option === currentQuestion.answer) {
-                    scoring.calculatePoints(currentQuestion.difficulty, true);
-                } else {
-                    scoring.calculatePoints(currentQuestion.difficulty, false);
-                }
-                
-                if (index + 1 < questions.length) {
-                    displayQuestion(index + 1, questions);
-                } else {
-                    alert('Quiz abgeschlossen!');
-                    alert(`Ergebnis: ${scoring.getScore()} Punkte (${scoring.getScorePercentage()}%)`);
-                    quizDiv.style.display = 'none'; // Quiz ausblenden
-                    if (playerInputDiv) {
-                        playerInputDiv.style.display = 'block'; // Spieler-Input wieder anzeigen
-                        if (playerNameInput instanceof HTMLInputElement) {
-                            playerNameInput.value = ''; // Eingabefeld zurücksetzen
-                        }
-                        updateScoreboard(playerName, scoring.getScore(), scoring.getScorePercentage()); // Punktestand aktualisieren
-                        scoring.resetScore(); // Punktestand zurücksetzen
-                    }
-                }
-            });
+  // Leaderboard aktualisieren
+  updateScoreboard(playerName, scoring.getScore(), scoring.getScorePercentage());
 
-            // Option zum Container hinzufügen
-            optionsDiv.appendChild(optionButton);
-        });
+  // Scoring zurücksetzen
+  scoring.resetScore();
 
-        // Quiz-Container sicherstellen, dass er sichtbar ist
-        quizDiv.style.display = 'block';
-    }
+
 }
 
 function updateScoreboard(playerName: string, score: number, percentage: number): void {
-    const leaderboardTableBody = document.querySelector('#leaderboard-table tbody');
-  
-    if (leaderboardTableBody) {
-      // Erstelle eine neue Zeile für das Ergebnis
-      const row = document.createElement('tr');
-  
-      // Erstelle die Zellen für Name, Punkte und Prozent
-      const nameCell = document.createElement('td');
-      nameCell.textContent = playerName;
-  
-      const scoreCell = document.createElement('td');
-      scoreCell.textContent = score.toString();
-  
-      const percentageCell = document.createElement('td');
-      percentageCell.textContent = percentage.toFixed(2) + '%'; // Formatierte Prozentanzeige
-  
-      // Füge die Zellen zur Zeile hinzu
-      row.appendChild(nameCell);
-      row.appendChild(scoreCell);
-      row.appendChild(percentageCell);
-  
-      // Füge die Zeile der Tabelle hinzu
-      leaderboardTableBody.prepend(row);
-    }
+  const leaderboardTableBody = document.querySelector('#leaderboard-table tbody');
+
+  if (leaderboardTableBody) {
+    // Erstelle eine neue Zeile für das Ergebnis
+    const row = document.createElement('tr');
+
+    // Erstelle die Zellen für Name, Punkte und Prozent
+    const nameCell = document.createElement('td');
+    nameCell.textContent = playerName;
+
+    const scoreCell = document.createElement('td');
+    scoreCell.textContent = score.toString();
+
+    const percentageCell = document.createElement('td');
+    percentageCell.textContent = percentage.toFixed(2) + '%'; // Formatierte Prozentanzeige
+
+    // Füge die Zellen zur Zeile hinzu
+    row.appendChild(nameCell);
+    row.appendChild(scoreCell);
+    row.appendChild(percentageCell);
+
+    // Füge die Zeile der Tabelle hinzu (an den Anfang der Tabelle)
+    leaderboardTableBody.prepend(row);
   }
-  
+}
