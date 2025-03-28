@@ -8,7 +8,7 @@ export class Question {
     }
 }
 export async function fetchQuestions() {
-    const response = await fetch('./../../questions.json');
+    const response = await fetch('questions.json');
     const data = await response.json();
     let questions = data.map((questions) => new Question(questions.category, questions.question, questions.options, questions.answer, questions.difficulty));
     let easy = questions.filter((q) => q.difficulty === 'easy');

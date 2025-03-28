@@ -5,9 +5,7 @@
     flex-direction: column;
     height: 100vh;
     background-color: #f8f9fa;
-    padding: 20px;
-    width: 100%;
-    max-width: 1500px;
+    padding: 20px;    
     margin: 0 auto;
 }
 
@@ -24,9 +22,13 @@
     border-radius: 8px;
     padding: 20px;
     width: 100%;
-    max-width: 1500px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
+}
+
+#player-name {
+    border-radius: 4px;
+    margin-bottom: 10px;
 }
 
 #quiz-container {
@@ -35,7 +37,6 @@
     border-radius: 8px;
     padding: 20px;
     width: 100%;
-    max-width: 1500px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     display: none;
     margin-top: 20px;
@@ -46,7 +47,6 @@
     margin-top: 40px;
     background-color: #fff;
     width: 100%;
-    max-width: 1500px;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);

@@ -1,7 +1,7 @@
 import { displayQuestion } from "./modules/ui.js";
 import { fetchQuestions, Question } from "./modules/questions.js";
 
-async function init() {
+async function play() {
   let questions: Question[] = await fetchQuestions();
   console.log(questions);
 
@@ -21,6 +21,12 @@ async function init() {
               quizDiv.style.display = 'block';
               if(questions.length > 0) {
                 displayQuestion(0, questions);
+                if (playerInputDiv) {
+                  playerInputDiv.style.display = 'block';
+                }
+                if (quizDiv) {
+                  quizDiv.style.display = 'block';
+                }
               }
           }
           } else {
@@ -28,9 +34,10 @@ async function init() {
           }
       });
   }
-
-
-
 }
 
-init();
+while(1)
+{
+  play();
+}
+

@@ -1,4 +1,7 @@
 import { IQuestion } from './questions.js';
+import { Scoring } from './scoring.js';
+
+const scoring = new Scoring();
 
 export function displayQuestion(index: number, questions: IQuestion[]): void {
     const quizDiv = document.getElementById('quiz-container');
@@ -29,16 +32,17 @@ export function displayQuestion(index: number, questions: IQuestion[]): void {
             // Klick-Event für die Option
             optionButton.addEventListener('click', () => {
                 if (option === currentQuestion.answer) {
-                    alert('Richtige Antwort!');
-                    // Nächste Frage laden, falls vorhanden
-                    if (index + 1 < questions.length) {
-                        displayQuestion(index + 1, questions);
-                    } else {
-                        alert('Quiz abgeschlossen!');
-                        quizDiv.style.display = 'none'; // Quiz ausblenden
-                    }
+                    scoring.calculatePoints(currentQuestion.difficulty, true);
                 } else {
-                    alert('Falsche Antwort! Versuche es erneut.');
+                    scoring.calculatePoints(currentQuestion.difficulty, false);
+                }
+                
+                if (index + 1 < questions.length) {
+                    displayQuestion(index + 1, questions);
+                } else {
+                    alert('Quiz abgeschlossen!');
+                    alert(`Ergebnis: ${scoring.getScore()} Punkte (${scoring.getScorePercentage()}%)`);
+                    quizDiv.style.display = 'none'; // Quiz ausblenden
                 }
             });
 
